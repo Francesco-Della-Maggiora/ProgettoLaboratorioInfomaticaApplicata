@@ -49,25 +49,25 @@ class SentimentAnalyzer:
         for index, post in enumerate(posts):
             sentiment = self.__sentiment_analyzer(post.title + " " + post.text)
 
-            if post.datetime.date() not in results:
-                results[post.datetime.date()] = {
+            if post.datetime not in results:
+                results[post.datetime] = {
                     "Negativo": 0,
                     "Neutrale": 0,
                     "Positivo": 0
                 }
 
-            results[post.datetime.date()][self.translate_sentiment(sentiment[0])] += 1
+            results[post.datetime][self.translate_sentiment(sentiment[0])] += 1
 
             for comment in post.comment_list:
                 sentiment = self.__sentiment_analyzer(comment.text)
-                if comment.datetime.date() not in results:
-                    results[comment.datetime.date()] = {
+                if comment.datetime not in results:
+                    results[comment.datetime] = {
                         "Negativo": 0,
                         "Neutrale": 0,
                         "Positivo": 0
                     }
 
-                results[comment.datetime.date()][self.translate_sentiment(sentiment[0])] += 1
+                results[comment.datetime][self.translate_sentiment(sentiment[0])] += 1
 
             if verbose:
                 print(f"Analizzato {index + 1}/{len_posts} post ...")
