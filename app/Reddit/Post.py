@@ -69,6 +69,19 @@ class Post:
             comment (Comment): Il commento da aggiungere alla lista dei commenti del post.
         """
         self.__comment_list.append(comment)
+        
+    def to_dict(self) -> dict:
+        """
+            Converte il post in un dizionario.
+        RETURNS:
+            dict: Un dizionario contenente il titolo, il testo, la data di pubblicazione e la lista dei commenti del post.
+        """
+        return {
+            "title": self.__title,
+            "text": self.__text,
+            "datetime": self.__datetime.isoformat(),
+            "comments": [comment.to_dict() for comment in self.__comment_list]
+        }
 
     def __repr__(self): 
         """

@@ -1,20 +1,18 @@
 from Reddit.CommentList import CommentList
 from Reddit.Post import Post
-
+import json
 
 class PostList:
     """
         Una classe per gestire una lista di post su Reddit.
     """
     __posts : list[Post]
-    __iter_counter : int
 
     def __init__(self):
         """
             Inizializza una nuova lista di post.
         """
         self.__posts = []
-        self.__iter_counter = 0
 
     def append(self, post : Post):
         """
@@ -32,22 +30,8 @@ class PostList:
         """
         self.__posts.sort(reverse=reverse)
 
-    def __iter__(self) -> Post|None:
-        """
-            Restituisce il post corrente per l'iteratore.
-        """
-        return self.__posts[self.__iter_counter] if len(self.__posts)>self.__iter_counter else None
-
-    def __next__(self):
-        """
-            Aumenta il contatore nell'iterazione.
-        RAISE:
-            StopIteration: Se non ci sono più post da iterare.
-        """
-        if self.__iter_counter == len(self.__posts):
-            raise StopIteration
-
-        self.__iter_counter += 1
+    def __iter__(self):
+        return iter(self.__posts)
 
     def __len__(self) -> int:
         """
@@ -69,3 +53,9 @@ class PostList:
             return_str += str(post) + "\n"
 
         return return_str
+
+    def to_json(self) -> str:
+        """
+            Converte l'intera lista in una stringa JSON.
+        """
+        return json.dumps([post.to_dict() for post in self.__posts], ensure_ascii=False, indent=4)

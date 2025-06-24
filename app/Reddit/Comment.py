@@ -35,6 +35,17 @@ class Comment:
         """
         return self.__datetime
 
+    def to_dict(self) -> dict:
+        """
+            Converte il commento in un dizionario.
+        RETURNS:
+            dict: Un dizionario contenente il testo e la data di pubblicazione del commento.
+        """
+        return {
+            'text': self.__text,
+            'datetime': self.__datetime.isoformat()
+        }
+
     def __repr__(self) -> str:
         """
             Restituisce una rappresentazione testuale del commento.
