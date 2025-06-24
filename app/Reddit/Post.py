@@ -101,3 +101,23 @@ class Post:
             bool: True se il post corrente è pubblicato prima di quello passato come parametro, altrimenti False.
         """
         return self.__datetime < other.__datetime
+    
+    @staticmethod
+    def from_dict(data: dict) -> 'Post':
+        """
+            Crea un'istanza di Post da un dizionario.
+        PARAMETRI:
+            data (dict): Il dizionario contenente i dati del post.
+        RETURNS:
+            Post: Un'istanza di Post popolata con i dati dal dizionario.
+        """
+        title = data.get("title", "")
+        text = data.get("text", "")
+        datetime_str = data.get("datetime", "")
+        datetime_obj = datetime.fromisoformat(datetime_str) if datetime_str else None
+        
+        comment_list = CommentList()
+        for comment_data in data.get("comments", []):
+            comment_list.append(Comment.from_dict(comment_data))
+        
+        return Post(title, text, datetime_obj, comment_list)

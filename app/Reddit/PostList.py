@@ -54,8 +54,41 @@ class PostList:
 
         return return_str
 
-    def to_json(self) -> str:
+    def to_dict(self) -> list[dict]:
         """
-            Converte l'intera lista in una stringa JSON.
+            Converte la lista di post in una lista di dizionari.
+        RETURNS:
+            list[dict]: Una lista di dizionari, ciascuno rappresentante un post.
         """
-        return json.dumps([post.to_dict() for post in self.__posts], ensure_ascii=False, indent=4)
+        return [post.to_dict() for post in self.__posts]
+    
+    def save_json(self, json_path : str) -> str:
+        """
+            Salva la lista di post in un file JSON.
+        PARAMETRI:
+            json_path (str): Il percorso del file JSON in cui salvare i post.
+        """
+        with open(json_path, 'w', encoding='utf-8') as f:
+            json.dump(self.to_dict(), f, ensure_ascii=False, indent=4)    
+    
+    @staticmethod
+    def from_json(json_string: str) -> 'PostList':
+        """
+            Crea una PostList da una stringa JSON.
+        PARAMETRI:
+            json_string (str): La stringa JSON da cui creare la PostList.
+        RETURNS:
+            PostList: Un'istanza di PostList popolata con i dati dalla stringa JSON.
+        """
+        post_list = PostList()
+        with open(json_string, 'r', encoding='utf-8') as f:
+            posts_data = json.load(f)
+
+        if len(posts_data) == 0:
+            return PostList()
+
+        for post_data in posts_data:
+            post = Post.from_dict(post_data)
+            post_list.append(post)
+
+        return post_list

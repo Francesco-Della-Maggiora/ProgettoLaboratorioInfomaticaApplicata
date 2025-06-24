@@ -63,3 +63,17 @@ class Comment:
             bool: True se il commento corrente è stato pubblicato prima di `other`, altrimenti False.
         """
         return self.__datetime < other.__datetime
+
+    @staticmethod
+    def from_dict(data: dict) -> 'Comment':
+        """
+            Crea un commento da un dizionario.
+        PARAMETRI:
+            data (dict): Il dizionario contenente il testo e la data di pubblicazione del commento.
+        RETURNS:
+            Comment: Un'istanza di Comment creata dai dati forniti.
+        """
+        return Comment(
+            text=data['text'],
+            datetime=datetime.fromisoformat(data['datetime'])
+        )
