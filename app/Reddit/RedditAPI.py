@@ -28,20 +28,21 @@ class RedditAPI:
             user_agent=config['user_agent']
         )
 
-    def get_posts(self, subreddit_name: str, limit: int = 10) -> PostList:
+    def get_posts(self, subreddit_name: str, want_comment=True, limit: int = 10) -> PostList:
         subreddit = self.__reddit.subreddit(subreddit_name)
         posts = subreddit.new(limit=limit)
 
         post_list = PostList()
 
         for post in posts:
-
+            
             c = CommentList()
-            for comment in post.comments.list():
-                c.append(Comment(
-                    comment.body,
-                    datetime.fromtimestamp(comment.created_utc, tz=timezone.utc)
-                ))
+            if want_comment:
+                for comment in post.comments.list():
+                    c.append(Comment(
+                        comment.body,
+                        datetime.fromtimestamp(comment.created_utc, tz=timezone.utc)
+                    ))
 
             post_list.append(Post(
                 post.title,
