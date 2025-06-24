@@ -1,2 +1,4 @@
 from .SentimentAnalyzer import SentimentAnalyzer
-__all__ = ["SentimentAnalyzer"]
+from .SentimentPlotter import SentimentPlotter
+
+__all__ = ["SentimentAnalyzer", "SentimentPlotter"]
