@@ -5,14 +5,12 @@ class CommentList:
         La classe CommentList rappresenta una lista di commenti su Reddit.
     """
     __comments : list[Comment]
-    __iter_counter : int
 
     def __init__(self):
         """
             Inizializza una nuova lista di commenti.
         """
         self.__comments = []
-        self.__iter_counter = 0
 
     def append(self, comment : Comment) -> None:
         """
@@ -30,22 +28,8 @@ class CommentList:
         """
         self.__comments.sort(reverse=reverse)
 
-    def __iter__(self) -> Comment|None:
-        """
-            Restituisce il commento corrente per l'iteratore.
-        """
-        return self.__comments[self.__iter_counter] if len(self.__comments)>self.__iter_counter else None
-
-    def __next__(self):
-        """
-            Aumenta il contatore nell'iterazione.
-        RAISE:
-            StopIteration: Se non ci sono più commenti da iterare.
-        """
-        if self.__iter_counter == len(self.__comments):
-            raise StopIteration
-
-        self.__iter_counter += 1
+    def __iter__(self):
+        return iter(self.__comments)
 
     def __repr__(self) -> str:
         """
