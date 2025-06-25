@@ -1,5 +1,6 @@
 from datetime import datetime
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 class SentimentPlotter:
 
@@ -69,6 +70,12 @@ class SentimentPlotter:
         plt.plot(self.__labels, self.__neutral, label='Neutrale', color='gray', marker='o')
         plt.plot(self.__labels, self.__positive, label='Positivo', color='green', marker='o')
     
+        plt.xticks(rotation=45)
+        plt.ylim(0, 100) 
+        plt.xlim(self.__labels[0], self.__labels[-1])
+
+        plt.xticks(ticks=self.__labels[::1], labels=[l.strftime('%d-%m-%y\n%H:%M') for l in self.__labels[::1]])
+
         plt.title(title)
         plt.xlabel('Date in Analisi')
         plt.ylabel('Valori in percentuale')
@@ -87,12 +94,17 @@ class SentimentPlotter:
             figsize (tuple): La dimensione della figura del grafico (Default: (10, 5))
         """
         plt.figure(figsize=figsize)
-        plt.plot(self.__labels, self.__total, label='Totale Post e Commenti', color='blue', marker='o')
+        plt.plot(self.__labels, self.__total, color='blue', marker='o')
+
+        plt.xticks(rotation=45)
+        plt.ylim(0, self.__total[-1])
+        plt.xlim(self.__labels[0], self.__labels[-1])
+
+        plt.xticks(ticks=self.__labels[::1], labels=[l.strftime('%d-%m-%y\n%H:%M') for l in self.__labels[::1]])
 
         plt.title(title)
         plt.xlabel('Date in Analisi')
         plt.ylabel('Numero di Post e Commenti')
-        #plt.legend()
         plt.grid(True)
         plt.tight_layout()
 
