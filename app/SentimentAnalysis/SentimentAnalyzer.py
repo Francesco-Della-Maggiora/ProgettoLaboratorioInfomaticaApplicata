@@ -1,6 +1,8 @@
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 import Reddit
+import string
 import os
+import re
 
 class SentimentAnalyzer:
     """
@@ -47,7 +49,8 @@ class SentimentAnalyzer:
         results = {}
         len_posts = len(posts)
         for index, post in enumerate(posts):
-            sentiment = self.__sentiment_analyzer(post.title + " " + post.text)
+            text = self.clean_text(post.title + " " + post.text)
+            sentiment = self.__sentiment_analyzer(text)
 
             if post.datetime not in results:
                 results[post.datetime] = {
@@ -59,7 +62,7 @@ class SentimentAnalyzer:
             results[post.datetime][self.translate_sentiment(sentiment[0])] += 1
 
             for comment in post.comment_list:
-                sentiment = self.__sentiment_analyzer(comment.text)
+                sentiment = self.__sentiment_analyzer(self.clean_text(comment.text))
                 if comment.datetime not in results:
                     results[comment.datetime] = {
                         "Negativo": 0,
@@ -73,3 +76,30 @@ class SentimentAnalyzer:
                 print(f"Analizzato {index + 1}/{len_posts} post ...")
         
         return results
+
+    @staticmethod
+    def clean_text(text : str) -> str:
+        """
+            Pulisce il testo  trasnformandolo in minuscolo, rimuovendo URL, menzioni, hastag, emoji e punteggiatura.
+        PARAMETRI:
+            text (str): Il testo da pulire.
+        RETURNS:
+            str: Il testo pulito.
+        """
+        text = text.lower()
+        text = re.sub(r'http\S+|www\.\S+', '', text)
+        text = re.sub(r'@\w+', '', text)
+        text = re.sub(r'#\w+', '', text)
+        emoji_pattern = re.compile(
+            "["
+            u"\U0001F600-\U0001F64F"  # emoticon
+            u"\U0001F300-\U0001F5FF"  # simboli e pittogrammi
+            u"\U0001F680-\U0001F6FF"  # trasporti e simboli mappa
+            u"\U0001F1E0-\U0001F1FF"  # bandiere
+            "]+", flags=re.UNICODE
+        )
+        text = emoji_pattern.sub(r'', text)
+        text = text.translate(str.maketrans('', '', string.punctuation))
+        #testo = re.sub(r'\s+', ' ', testo).strip()
+
+        return text
