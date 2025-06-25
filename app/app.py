@@ -45,9 +45,9 @@ def analyze_page():
     if n_interval <= 0:
         n_interval = 10
                 
-    x_axis = request.args.get('x_axis_size', 10, type=int)
+    x_axis = request.args.get('x_axis_size', 15, type=int)
     if x_axis <= 0:
-        x_axis = 10
+        x_axis = 15
                 
     y_axis = request.args.get('y_axis_size', 5, type=int)
     if y_axis <= 0:
@@ -79,7 +79,9 @@ def analyze_api():
             results = analyze(request)
             if isinstance(results, tuple):
                 text, status_code = results
-                return jsonify(text, status_code)
+                return jsonify({'error': text}), status_code
+
+            return jsonify({k.isoformat(): v for k, v in results.items()})
         except Exception as e:
             return jsonify({'error': f'Errore durante l\'analisi: {str(e)}'}), 500
 
