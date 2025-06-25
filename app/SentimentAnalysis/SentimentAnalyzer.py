@@ -1,4 +1,5 @@
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
+import torch
 import Reddit
 import string
 import os
@@ -32,9 +33,14 @@ class SentimentAnalyzer:
         PARAMETRI:
             model_path (str): Il percorso del modello pre-addestrato da utilizzare per l'analisi del sentiment (default è il percorso relativo al modello di sentiment analysis).
         """
+        device = device = torch.device(
+            'cuda' if torch.cuda.is_available() else
+            'mps' if torch.backends.mps.is_available() else
+            'cpu'
+        )
         self.__tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.__model = AutoModelForSequenceClassification.from_pretrained(model_path, num_labels=3, problem_type="single_label_classification")
-        self.__sentiment_analyzer = pipeline("sentiment-analysis", model=self.__model, tokenizer=self.__tokenizer)
+        self.__sentiment_analyzer = pipeline("sentiment-analysis", model=self.__model, tokenizer=self.__tokenizer, device=device, truncation=True, max_length=512)
 
     def analyze(self, posts : Reddit.PostList, verbose: bool = True) -> dict:
         """
@@ -100,6 +106,5 @@ class SentimentAnalyzer:
         )
         text = emoji_pattern.sub(r'', text)
         text = text.translate(str.maketrans('', '', string.punctuation))
-        #testo = re.sub(r'\s+', ' ', testo).strip()
 
         return text

@@ -1,4 +1,5 @@
 from datetime import datetime
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
@@ -40,7 +41,7 @@ class SentimentPlotter:
         for i in range(n_interval):
             
             end_interval = min_date + (i + 1) * step            
-            if i == 9: #Evita errori di arrotondamento
+            if i == n_interval-1: #Evita errori di arrotondamento
                 end_interval = max_date
 
             self.__labels.append(end_interval)
@@ -58,13 +59,20 @@ class SentimentPlotter:
                 index += 1
 
     def plot_sentiment(self, save_path : str = "img/sentiment_plot.png", title : str = "Andamento dei Sentimenti", figsize : tuple[int, int] = (10, 5)):
-
+        """
+            Plotta l'andamento dei sentimenti nel tempo.
+        PARAMETRI:
+            save_path (str): Il percorso dove salvare il grafico (Default: "img/sentiment_plot.png")
+            title (str): Il titolo del grafico (Default: "Andamento dei Sentimenti")
+            figsize (tuple): La dimensione della figura del grafico (Default: (10, 5))
+        """ 
         for i in range(len(self.__labels)):
             counter = self.__negative[i] + self.__neutral[i] + self.__positive[i]
             self.__negative[i] = (self.__negative[i] / counter) * 100 
             self.__neutral[i] = (self.__neutral[i] / counter) * 100
             self.__positive[i] = (self.__positive[i] / counter) * 100
         
+        matplotlib.rcParams.update({'font.size': 18}) 
         plt.figure(figsize=figsize)
         plt.plot(self.__labels, self.__negative, label='Negativo', color='red', marker='o')
         plt.plot(self.__labels, self.__neutral, label='Neutrale', color='gray', marker='o')
@@ -93,6 +101,7 @@ class SentimentPlotter:
             title (str): Il titolo del grafico (Default: "Andamento del numero di Post Totali")
             figsize (tuple): La dimensione della figura del grafico (Default: (10, 5))
         """
+        matplotlib.rcParams.update({'font.size': 18})
         plt.figure(figsize=figsize)
         plt.plot(self.__labels, self.__total, color='blue', marker='o')
 
