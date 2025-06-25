@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentiment Analysis</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
+</head>
+<body>
+
+    <div class="wrapper">
+
+        <h1>Analisi del Sentimento dei Post di Reddit</h1> 
+
+        <div class="container">
+            <form action="/analyze" method="get">
+                <input type="text" placeholder="Nome del subreddit" name="mainInput" required>
+
+                <div class="show-settings-toggle" onclick="toggleSettings()">Mostra impostazioni avanzate</div>
+
+                <div class="hidden-settings" id="settings">
+                    <label>Numero di post:
+                        <input type="number" name="limit" value="10" min="1">
+                    </label><br>
+                    <label>Numero di Intervalli nei grafici:
+                        <input type="number" name="n_interval" value="10" min="1">
+                    </label><br>
+                    <label>Titolo grafico del sentimento:
+                        <input type="text" name="title1">
+                    </label><br>
+                    <label>Titolo grafico del numero di post:
+                        <input type="text" name="title2">
+                    </label><br>
+                    <label>Dimensione dell'asse X del grafico:
+                        <input type="number" name="x_axis_size" value="10" min="1">
+                    </label><br>
+                    <label>Dimensione dell'asse Y del grafico:
+                        <input type="number" name="y_axis_size" value="5" min="1">
+                    </label><br>
+                </div>
+
+                <button type="submit">Invia</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
