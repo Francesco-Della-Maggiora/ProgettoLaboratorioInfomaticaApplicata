@@ -1,5 +1,6 @@
 ### Python ###
 
+app/config/
 app/config/config.json
 
 # Byte-compiled / optimized / DLL files
