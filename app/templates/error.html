@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Errore</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='results.css') }}">
+</head>
+<body>
+    <div class="wrapper">
+        <h1>Errore</h1>
+        <p>Ci scusiamo per il disagio ma si è verificato un errore:</p>
+        <div class="error-message">
+            <strong>{{ error }}</strong>
+        </div>
+
+        <div class="back-button">
+            <a href="/home">Torna alla schermata principale</a>
+        </div>
+    </div>
+</body>
+</html>
