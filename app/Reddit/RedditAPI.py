@@ -39,6 +39,9 @@ class RedditAPI:
             c = CommentList()
             if want_comment:
                 for comment in post.comments.list():
+                    if not isinstance(comment, praw.models.Comment):
+                        continue
+                
                     c.append(Comment(
                         comment.body,
                         datetime.fromtimestamp(comment.created_utc, tz=timezone.utc)
