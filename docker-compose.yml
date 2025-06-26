@@ -1,0 +1,20 @@
+services:
+  sentiment-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sentiment_service
+    ports:
+      - "5000:5000"
+    volumes:
+      - sentiment_data:/app/
+    networks:
+      - sentiment_net
+    restart: unless-stopped
+
+volumes:
+  sentiment_data:
+
+networks:
+  sentiment_net:
+    driver: bridge
