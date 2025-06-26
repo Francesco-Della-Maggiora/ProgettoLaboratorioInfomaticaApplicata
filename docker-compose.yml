@@ -14,7 +14,7 @@ services:
 
 volumes:
   sentiment_data:
-
+ 
 networks:
   sentiment_net:
     driver: bridge

@@ -13,5 +13,6 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser \
   && chmod -R u+rwX /app
 USER appuser
 
+
 EXPOSE 5000
 CMD ["python3", "app.py"]

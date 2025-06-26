@@ -15,7 +15,7 @@ def analyze(request) -> dict|tuple:
     limit = request.args.get('limit', 10, type=int)
     if limit <= 0:
         limit = 10
-        
+    
     reddit = RedditAPI(f"{os.path.dirname(__file__)}/config/config.json")
     posts : PostList = reddit.get_posts(subreddit, limit=limit)
 
