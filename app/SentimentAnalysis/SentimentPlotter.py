@@ -66,8 +66,16 @@ class SentimentPlotter:
             title (str): Il titolo del grafico (Default: "Andamento dei Sentimenti")
             figsize (tuple): La dimensione della figura del grafico (Default: (10, 5))
         """ 
+        if self.__total == 0:
+            raise ValueError("Non ci sono post o commenti da analizzare.")
+        
         for i in range(len(self.__labels)):
             counter = self.__negative[i] + self.__neutral[i] + self.__positive[i]
+            if counter == 0:
+                self.__negative[i] = 0
+                self.__neutral[i] = 0
+                self.__positive[i] = 0
+                continue
             self.__negative[i] = (self.__negative[i] / counter) * 100 
             self.__neutral[i] = (self.__neutral[i] / counter) * 100
             self.__positive[i] = (self.__positive[i] / counter) * 100
