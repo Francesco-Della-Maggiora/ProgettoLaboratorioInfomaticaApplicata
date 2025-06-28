@@ -8,7 +8,7 @@ def analyze(request) -> dict|tuple:
     if request.method != 'GET':
         return ({'error': 'Metodo non supportato. Utilizzare GET.'}, 405)
     
-    subreddit = request.args.get('mainInput')
+    subreddit = request.args.get('subreddit_name')
     if not subreddit:
         return ({'error': 'Il Parametro subreddit è obbligatorio'}, 400)
 
@@ -19,7 +19,7 @@ def analyze(request) -> dict|tuple:
     reddit = RedditAPI(f"{os.path.dirname(__file__)}/config/config.json")
     posts : PostList = reddit.get_posts(subreddit, limit=limit)
 
-    if not posts:
+    if not posts or len(posts) == 0:
         return ({'error': 'Nessun post trovato per il subreddit specificato'}, 404)
             
     sa = SentimentAnalyzer(f"{os.path.dirname(__file__)}/config/finetuning-sentiment-model-reddit-data")
@@ -58,8 +58,8 @@ def analyze_page():
 
     sp = SentimentPlotter(results, n_interval=n_interval)
             
-    sentiment = f"{title_sentiment}-{request.args.get('mainInput')}-{n_interval}-{x_axis}-{y_axis}-sentiment"
-    counter = f"{title_sentiment}-{request.args.get('mainInput')}-{n_interval}-{x_axis}-{y_axis}-counter"
+    sentiment = f"{title_sentiment}-{request.args.get('subreddit_name')}-{n_interval}-{x_axis}-{y_axis}-sentiment"
+    counter = f"{title_sentiment}-{request.args.get('subreddit_name')}-{n_interval}-{x_axis}-{y_axis}-counter"
 
     path_sentiment = f"{hashlib.md5(sentiment.encode()).hexdigest()}.png"
     path_counter = f"{hashlib.md5(counter.encode()).hexdigest()}.png"
