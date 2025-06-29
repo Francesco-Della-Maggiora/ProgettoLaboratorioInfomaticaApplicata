@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory
+import prawcore
 from SentimentAnalysis import SentimentAnalyzer, SentimentPlotter
 from Reddit import RedditAPI, PostList
 import hashlib
@@ -39,6 +40,19 @@ def analyze_page():
             text, status_code = results
             return render_template('error.html', error=text), status_code
     except Exception as e:
+        if isinstance(e, prawcore.exceptions.NotFound):
+            return render_template('error.html', error='Subreddit non trovato'), 404
+        elif isinstance(e, prawcore.exceptions.Forbidden):
+            return render_template('error.html', error='Accesso negato al subreddit'), 403
+        elif isinstance(e, prawcore.exceptions.BadRequest):
+            return render_template('error.html', error='Richiesta non valida'), 400
+        elif isinstance(e, prawcore.exceptions.ServerError):
+            return render_template('error.html', error='Errore del server di Reddit'), 500
+        elif isinstance(e, prawcore.exceptions.TooManyRequests):
+            return render_template('error.html', error='Troppe richieste, attendere e riprovare'), 429
+        elif isinstance(e, prawcore.exceptions.Redirect):
+            return render_template('error.html', error='Redirect non supportato'), 301
+        
         return render_template('error.html', error=f'Errore durante l\'analisi: {str(e)}'), 500
         
     n_interval = request.args.get('n_interval', 10, type=int)
