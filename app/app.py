@@ -40,7 +40,7 @@ def analyze_page():
             text, status_code = results
             return render_template('error.html', error=text), status_code
         
-    except prawcore.exceptions.PRAWException|prawcore.exceptions.Redirect:
+    except prawcore.exceptions.Redirect:
         return render_template('error.html', error='Subreddit non trovato'), 404
 
     except prawcore.exceptions.Forbidden:
@@ -99,7 +99,7 @@ def analyze_api():
             return jsonify({'error': text}), status_code
         return jsonify({k.isoformat(): v for k, v in results.items()})
 
-    except prawcore.exceptions.PRAWException|prawcore.exceptions.Redirect:
+    except prawcore.exceptions.Redirect:
         return jsonify({'error': 'Subreddit non trovato'}), 404
 
     except prawcore.exceptions.Forbidden:
