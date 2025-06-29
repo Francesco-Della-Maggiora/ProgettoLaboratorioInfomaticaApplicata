@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory
-import prawcore
 from SentimentAnalysis import SentimentAnalyzer, SentimentPlotter
 from Reddit import RedditAPI, PostList
+import prawcore
 import hashlib
 import os
 
@@ -89,15 +89,15 @@ def analyze_page():
 
 @app.route('/api/analyze')
 def analyze_api():
-        try:
-            results = analyze(request)
-            if isinstance(results, tuple):
-                text, status_code = results
-                return jsonify({'error': text}), status_code
-
-            return jsonify({k.isoformat(): v for k, v in results.items()})
-        except Exception as e:
-            return jsonify({'error': f'Errore durante l\'analisi: {str(e)}'}), 500
+    try:
+        results = analyze(request)
+        if isinstance(results, tuple):
+            text, status_code = results
+            return jsonify({'error': text}), status_code
+        return jsonify({k.isoformat(): v for k, v in results.items()})
+    
+    except Exception as e:
+        return jsonify({'error': f'Errore durante l\'analisi: {str(e)}'}), 500
 
 @app.route('/generated/<filename>')
 def generated_image(filename):
