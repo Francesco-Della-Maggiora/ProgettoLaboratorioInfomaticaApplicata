@@ -39,20 +39,23 @@ def analyze_page():
         if isinstance(results, tuple):
             text, status_code = results
             return render_template('error.html', error=text), status_code
-    except Exception as e:
-        if isinstance(e, prawcore.exceptions.NotFound):
-            return render_template('error.html', error='Subreddit non trovato'), 404
-        elif isinstance(e, prawcore.exceptions.Forbidden):
-            return render_template('error.html', error='Accesso negato al subreddit'), 403
-        elif isinstance(e, prawcore.exceptions.BadRequest):
-            return render_template('error.html', error='Richiesta non valida'), 400
-        elif isinstance(e, prawcore.exceptions.ServerError):
-            return render_template('error.html', error='Errore del server di Reddit'), 500
-        elif isinstance(e, prawcore.exceptions.TooManyRequests):
-            return render_template('error.html', error='Troppe richieste, attendere e riprovare'), 429
-        elif isinstance(e, prawcore.exceptions.Redirect):
-            return render_template('error.html', error='Redirect non supportato'), 301
         
+    except prawcore.exceptions.PRAWException|prawcore.exceptions.Redirect:
+        return render_template('error.html', error='Subreddit non trovato'), 404
+
+    except prawcore.exceptions.Forbidden:
+        return render_template('error.html', error='Accesso negato al subreddit'), 403
+    
+    except prawcore.exceptions.BadRequest:
+        return render_template('error.html', error='Richiesta non valida'), 400
+    
+    except prawcore.exceptions.ServerError:
+        return render_template('error.html', error='Errore del server di Reddit'), 500
+    
+    except prawcore.exceptions.TooManyRequests:
+        return render_template('error.html', error='Troppe richieste, attendere e riprovare'), 429
+
+    except Exception as e:
         return render_template('error.html', error=f'Errore durante l\'analisi: {str(e)}'), 500
         
     n_interval = request.args.get('n_interval', 10, type=int)
@@ -95,9 +98,25 @@ def analyze_api():
             text, status_code = results
             return jsonify({'error': text}), status_code
         return jsonify({k.isoformat(): v for k, v in results.items()})
+
+    except prawcore.exceptions.PRAWException|prawcore.exceptions.Redirect:
+        return jsonify({'error': 'Subreddit non trovato'}), 404
+
+    except prawcore.exceptions.Forbidden:
+        return jsonify({'error': 'Accesso negato al subreddit'}), 403
+
+    except prawcore.exceptions.BadRequest:
+        return jsonify({'error': 'Richiesta non valida'}), 400
+
+    except prawcore.exceptions.ServerError:
+        return jsonify({'error': 'Errore del server di Reddit'}), 500
     
+    except prawcore.exceptions.TooManyRequests:
+        return jsonify({'error': 'Troppe richieste, attendere e riprovare'}), 429
+
     except Exception as e:
         return jsonify({'error': f'Errore durante l\'analisi: {str(e)}'}), 500
+
 
 @app.route('/generated/<filename>')
 def generated_image(filename):
