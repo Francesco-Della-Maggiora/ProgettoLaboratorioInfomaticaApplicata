@@ -5,6 +5,8 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
+ENV MPLCONFIGDIR=/tmp/mplconfig
+
 COPY app/ ./
 
 RUN groupadd -r appuser && useradd -r -g appuser appuser \
