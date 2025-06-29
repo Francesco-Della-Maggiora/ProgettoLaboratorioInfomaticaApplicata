@@ -14,7 +14,7 @@ Questo progetto permette di analizzare il sentimento dei post e dei commenti di 
 ## Configurazione
 
 Per aggiungere i file di configurazione occore scaricare la cartella conf e posizionarna all'interno della cartella app, come descritto nella 
-[#documentazione](documentazione)
+[documentazione](#Documentazione)
 
 ## Avvio dell'applicazione
 
@@ -35,7 +35,7 @@ Per aggiungere i file di configurazione occore scaricare la cartella conf e posi
 ```
   /api/analyze
 ```
-<<<<<<< HEAD
+
 Consente di eseguire un'analisi sui post e i commenti di un determinato subreddit. <br>
 Il parametro obbligatorio è subreddit_name che contiene il nome del subreddit su cui fare l'analisi. <br>
 L'API accetta anche un parametro opzionale limit (Defualt 10) che indica il numero di post su cui fare l'analisi. Se il valore di limit è minore o uguale di 0 viene preso in considerazione il valore di Default.
